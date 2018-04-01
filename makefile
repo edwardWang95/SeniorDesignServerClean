@@ -15,4 +15,4 @@ server.o: server.cpp
 
 #remove all object files and output
 clean:
-	rm -f *.o output
+	rm *.o server
