@@ -20,6 +20,8 @@ std::vector<pthread_t> threadList;
 void setupServer();
 void acceptClients();
 void* handleClientThread(void *vptr);
+void writeToClientFromShell(int clientfd);
+void outputEncryptedImage(int clientfd);
 
 int main() {
     setupServer();
@@ -91,14 +93,11 @@ void* handleClientThread(void *vptr)
     //get arguments
     int clientfd = *((int *) vptr);
     unsigned long size = 0;
-    /*
-    while(true)
-    {
-        if(map.memory == NULL)continue;
-        size = map.size;
-        write(clientfd, map.memory, size);
-    }
-    */
+    writeToClientFromShell(clientfd);
+}
+
+void writeToClientFromShell(int clientfd)
+{
     std::cout << "=> New client added : " << clientfd << std::endl;
     std::string input;
     while(true)
@@ -113,4 +112,17 @@ void* handleClientThread(void *vptr)
             pthread_exit(NULL);
         }
     }
+}
+
+/**
+ * Output encrypted image from file to client.
+ * */
+void outputEncryptedImage(int clientfd)
+{
+    std::ifstream image;
+    //place into infinite while loop when finished testing
+    image.open("encryptedImage.jpg", std::ios::in | std::ios::binary);
+    int size;
+    char buf[1024];
+    while((size = image.readsome(buf, 1024)) > 0) write(clientfd, buf, size);
 }
