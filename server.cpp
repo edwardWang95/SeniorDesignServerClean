@@ -23,7 +23,8 @@ void* handleClientThread(void *vptr);
 void writeToClientFromShell(int clientfd);
 void outputEncryptedImage(int clientfd);
 
-int main() {
+int main(int argc, char* argv[]) {
+    serverPort = atoi(argv[1]);
     setupServer();
     acceptClients();
     return 0;
