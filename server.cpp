@@ -2,13 +2,14 @@
 #include <fstream>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <vector>
 #include <thread>
 
 #define ServerQueue 5
 
-std::string ipAddress = "";
+char* ipAddress;
 int serverfd, serverPort;
 struct sockaddr_in server_addr;
 int socketOption = 1;
@@ -24,7 +25,8 @@ void writeToClientFromShell(int clientfd);
 void outputEncryptedImage(int clientfd);
 
 int main(int argc, char* argv[]) {
-    serverPort = atoi(argv[1]);
+    ipAddress = argv[1];
+    serverPort = atoi(argv[2]);
     setupServer();
     acceptClients();
     return 0;
@@ -44,7 +46,8 @@ void setupServer(){
     std::cout << "=> Server Socket created" << std::endl;
     //setup socket address in
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = htons(INADDR_ANY);
+    server_addr.sin_addr.s_addr = inet_addr(ipAddress);    //server finds: INADDR_ANY
+    //server_addr.sin_addr.s_addr = htons(INADDR_ANY);
     server_addr.sin_port = htons(serverPort);
     //bind serverSocket socket to serverSocket address
     if (bind(serverfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
