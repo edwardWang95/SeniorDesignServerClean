@@ -3,10 +3,10 @@ Build Instructions
 ---
 
 # Build
-$ make
+make
 
 # Run
-$ ./server IPAddress PortNum
+./server IPAddress PortNum
 
 10.0.0.0/8 IP addresses: 10.0.0.0 -- 10.255.255.255
 
